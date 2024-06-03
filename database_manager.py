@@ -1,6 +1,7 @@
 # from constant import MONGODB_URL,DATABASE_NAME
 from datetime import timedelta
 from pymongo import MongoClient
+from pprint import pprint
 
 class mongodb:
     def __init__(self, MONGODB_URL, DATABASE_NAME):
@@ -17,15 +18,19 @@ class mongodb:
         try:
             self.myclient = MongoClient(self.mongo_url)
             self.mydb = self.myclient[self.database_name]
-            self.enter("test",{"hello":"world"})
+            self.check_camera_alive()
             connected = True
+
         except:
             print("MongoDB not connected")
         print(connected,self.mongo_url,self.database_name)
         return connected
+    
+    def check_camera_alive(self):
+        pipeline = [
+            {"$group": {"_id": "$camera_name", "max_time": {"$max": "$event_time"}}}
+        ]
+        data = self.mydb["occupancy"].aggregate(pipeline)
+        pprint(data)
 
-    # enter values in database
-    def enter(self, name, data):
-        self.mycollection = self.mydb[name]
-        self.mycollection.insert_one(data)
         
