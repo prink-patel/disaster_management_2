@@ -1,13 +1,22 @@
-RABBITMQ_USERNAME = "wsdot"
-RABBITMQ_PASSWORD = "12sd3"
-RABBITMQ_HOST = "localhost"
-RABBITMQ_PORT = 5672
-RABBIT_QUEUE_NAME = "ams"
-RABBIT_EXCHANGE_NAME = "ams"
-RABBIT_ROUTING_KEY = "ams"
+RABBITMQ_LIST = [
+    {
+        "RABBITMQ_USERNAME" : "wot",
+        "RABBITMQ_PASSWORD" : "123",
+        "RABBITMQ_HOST" : "localhost",
+        "RABBITMQ_PORT" : 5672 ,
+        "RABBIT_QUEUE_NAME" : "ams",
+        "RABBIT_EXCHANGE_NAME" : "ams",
+        "RABBIT_ROUTING_KEY" : "ams",
+        "RABBIT_QUEUE_MAX_SIZE" : 400
+    }
+]
 
-RABBIT_QUEUE_MAX_SIZE = 400
 
 
-MONGODB_URL_LIST =["mongodb://localhost:27017"]
-DATABASE_NAME_LIST = ["people-occupancy"]
+
+MONGODB_LIST=[
+    {
+    "MONGODB_URL" : "mongodb://localhost:27017",
+    "DATABASE_NAME" : "people-occupancy"
+    }
+]
