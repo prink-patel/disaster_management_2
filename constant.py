@@ -9,5 +9,5 @@ RABBIT_ROUTING_KEY = "ams"
 RABBIT_QUEUE_MAX_SIZE = 400
 
 
-MONGODB_URL ="asdfdsgger3454335fdgert3"
-DATABASE_NAME = "mydatabase"
+MONGODB_URL_LIST =["mongodb://localhost:27017","mondfsdfzdsdf","asdfsadfsd"]
+DATABASE_NAME_LIST = ["test","sldfkj","akfdhkj"]

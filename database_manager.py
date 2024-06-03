@@ -1,31 +1,27 @@
-from constant import MONGODB_URL,DATABASE_NAME
+# from constant import MONGODB_URL,DATABASE_NAME
 from datetime import timedelta
 from pymongo import MongoClient
 
 class mongodb:
-    _instance = None
-    
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = object.__new__(cls)
-        return cls._instance
-    
-    def __init__(self):
+    def __init__(self, MONGODB_URL, DATABASE_NAME):
+        self.mongo_url = MONGODB_URL
+        self.database_name=DATABASE_NAME
         try:
-            self.myclient = MongoClient(MONGODB_URL)
-            self.mydb = self.myclient[DATABASE_NAME]
+            self.myclient = MongoClient(self.mongo_url)
+            self.mydb = self.myclient[self.database_name]
         except:
             print("MongoDB not connected")
             
     def reconnect(self):
         connected = False
         try:
-            self.myclient = MongoClient(MONGODB_URL)
-            self.mydb = self.myclient[DATABASE_NAME]
+            self.myclient = MongoClient(self.mongo_url)
+            self.mydb = self.myclient[self.database_name]
             self.enter("test",{"hello":"world"})
             connected = True
         except:
             print("MongoDB not connected")
+        print(connected,self.mongo_url,self.database_name)
         return connected
 
     # enter values in database
