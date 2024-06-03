@@ -4,20 +4,28 @@ from datetime import timedelta
 import datetime
 import time
 from email_manager import email_manager
-from constant import MONGODB_URL_LIST, DATABASE_NAME_LIST
+from constant import MONGODB_LIST,RABBITMQ_LIST
 
 class main:
     def __init__(self) -> None:
         
         self.email_manager = email_manager()
         self.database_manager_dict = {}
+        self.rabbitmq_manager_dict = {}
         
 
     def create_object(self):
-        self.rabbitmq_queue = RabbitMQManager()
+        # self.rabbitmq_queue = RabbitMQManager()
         try:
-            for url, name in zip(MONGODB_URL_LIST, DATABASE_NAME_LIST):
-                self.database_manager_dict[url] = mongodb(url,name)
+            for data in MONGODB_LIST:
+                self.database_manager_dict[data["MONGODB_URL"]] = mongodb(data["MONGODB_URL"],data["DATABASE_NAME"])
+            
+            for data in RABBITMQ_LIST:
+                self.rabbitmq_manager_dict[data["RABBITMQ_USERNAME"]] = RabbitMQManager(data)
+                
+                
+                
+                
         except Exception as e:
             print(e)
             
@@ -26,28 +34,19 @@ class main:
 
     def check_status(self):
         self.current_time = datetime.datetime.now().second  # change second to min
-
         if self.current_time % 5 in [0, 5]:
             print("*"*5)
             print("5 min completed")
-            for url in MONGODB_URL_LIST:
-                print("#"*10)
-                print(url)
-                self.database_manager = self.database_manager_dict[url]
-
-                
-                
+            
+            for data in MONGODB_LIST:
+                self.database_manager = self.database_manager_dict[data["MONGODB_URL"]]
                 if not self.database_manager.reconnect():
-                    self.send_to_email("Database")
+                    self.send_to_email(f"Database {data['MONGODB_URL']}")
 
-            
-            
-            
-            # if not self.rabbitmq_queue.reconnect():
-            #     self.send_to_email("RabbitMQ")
-            # if not self.database_manager.reconnect():
-            #     self.send_to_email("Database")
-
+            for data in RABBITMQ_LIST:
+                self.rabbitmq_manager = self.rabbitmq_manager_dict[data["RABBITMQ_USERNAME"]]
+                if not self.rabbitmq_manager.reconnect():
+                    self.send_to_email(f"RabbitMQ {data['RABBITMQ_USERNAME']}")
 
     def send_to_email(self,name):
         self.email_manager.send_email(name)
